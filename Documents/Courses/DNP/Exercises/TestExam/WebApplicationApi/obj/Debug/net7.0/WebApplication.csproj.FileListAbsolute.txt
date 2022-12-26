@@ -1,0 +1,7 @@
+/Users/test/Documents/Courses/DNP/Exercises/TestExam/WebApplication/obj/Debug/net7.0/WebApplication.csproj.AssemblyReference.cache
+/Users/test/Documents/Courses/DNP/Exercises/TestExam/WebApplication/obj/Debug/net7.0/WebApplication.GeneratedMSBuildEditorConfig.editorconfig
+/Users/test/Documents/Courses/DNP/Exercises/TestExam/WebApplication/obj/Debug/net7.0/WebApplication.AssemblyInfoInputs.cache
+/Users/test/Documents/Courses/DNP/Exercises/TestExam/WebApplication/obj/Debug/net7.0/WebApplication.AssemblyInfo.cs
+/Users/test/Documents/Courses/DNP/Exercises/TestExam/WebApplication/obj/Debug/net7.0/WebApplication.csproj.CoreCompileInputs.cache
+/Users/test/Documents/Courses/DNP/Exercises/TestExam/WebApplication/obj/Debug/net7.0/WebApplication.MvcApplicationPartsAssemblyInfo.cs
+/Users/test/Documents/Courses/DNP/Exercises/TestExam/WebApplication/obj/Debug/net7.0/WebApplication.MvcApplicationPartsAssemblyInfo.cache
