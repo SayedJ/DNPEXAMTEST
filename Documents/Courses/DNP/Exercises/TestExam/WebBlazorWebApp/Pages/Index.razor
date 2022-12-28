@@ -1,0 +1,131 @@
+﻿@page "/"
+@inject WebBlazorWebApp.ClientCallingAPI.ITeamPlayer loadTeam;
+@using WebBlazorWebApp.Models;
+
+
+<PageTitle>Teams in the league</PageTitle>
+
+<EditForm Model="team"  class="card card-body bg-light mt-5">
+<div class="form-group row">
+    <label for="teamName" class="col-md-2 col-form-label">Name:</label>
+    <div class="col-md-10">
+        <InputText id="teamName" class="form-control" @bind-Value="@team.TeamName" />
+    </div>
+</div>
+<div class="form-group row">
+    <label for="ranking" class="col-md-2 col-form-label">Ranking:</label>
+    <div class="col-md-10">
+        <InputNumber id="ranking" class="form-control" @bind-Value="@team.Ranking" />
+    </div>
+</div>
+    <div class="row">
+        <div class="col-md-12 text-right">
+            <button type="submit" class="btn btn-success" @onclick="(() => GetTeamFiltered(team.TeamName, team.Ranking) )">Filter</button>
+        </div>
+    </div>
+
+ </EditForm>
+@if(teams == null)
+{
+    
+}else if (!teams.Any())
+{
+    
+}else{
+    
+    @foreach(var item in teams)
+    {
+       <h6>@item.TeamName, coached by @item.NameOfCoach, ranking: @item.Ranking </h6>
+       <p>Players:</p>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Shirt Number</th>
+                <th>Salary</th>
+                <th>Goals This Seasono</th>
+                <th>Position</th>
+                <th>Delete</th>
+
+            </tr>
+        </thead>
+        <tbody>
+            @foreach(var play in item.Players){
+            <tr>
+                <td>@play.Name</td>
+                <td>@play.ShirtNumber</td>
+                <td>@play.Salary</td>
+                <td>@play.GoalsThisSeason</td>
+                <td>@play.Position</td>
+                        <td><button class="btn btn-danger" @onclick="@(() => RemovePlayer(play.Id))" type="button"><i class="fa-solid fa-trash-can"></i></button></td>
+
+
+            </tr>
+            }
+             
+            </tbody>
+
+</table>
+    }
+
+}
+
+@if (!string.IsNullOrEmpty(msg))
+{
+    <label style="color:@color">@msg</label>
+}
+
+@code{
+
+
+    private List<Team> teams = new List<Team>();
+    private string msg = " ";
+    private string color = " ";
+    private string name = " ";
+    private int ranking = 0;
+
+    private Team team = new();
+    protected override async Task OnInitializedAsync()
+    {
+        teams = await loadTeam.GetTeams();
+
+
+    }
+
+    private async Task RemovePlayer(int playerId)
+    {
+        msg = await loadTeam.RemovePlayer(playerId);
+        if(msg == "OK")
+        {
+            msg = "Player has been deleted.";
+            color = "red";
+        }
+        else
+        {
+            msg = "something went wrong";
+            color = "black";
+        }
+        await OnInitializedAsync();
+    }
+
+    private async Task GetTeamFiltered(string? name, int? ranking)
+    {
+        try
+        {
+            teams = await loadTeam.GetTeamsFiltered(name, ranking);
+        }
+        catch (Exception e)
+        {
+
+            Console.WriteLine(e);
+            msg = e.Message;
+            color = "red";
+        }
+    }
+
+
+
+    
+
+
+}

@@ -23,7 +23,7 @@ public class PlayerController : ControllerBase
     }
 
     [HttpPut]
-    [Route("api/[controller]/{teamName}")]// GET}
+    [Route("api/[controller]/{teamName}")]
     public async Task AddPlayer(string teamName, [FromBody]Player player)
     {
        Team team = new Team();

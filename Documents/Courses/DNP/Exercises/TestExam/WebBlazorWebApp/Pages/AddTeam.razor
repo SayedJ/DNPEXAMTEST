@@ -1,0 +1,69 @@
+﻿@page "/AddTeam"
+@using WebBlazorWebApp.Models;
+@inject WebBlazorWebApp.ClientCallingAPI.ITeamPlayer callTeamApi;
+<h2>Create Team Form</h2>
+<EditForm Model="team" OnSubmit="CreateTeam" class="card card-body bg-light mt-5">
+    <div class="form-group row">
+        <label for="teamName" class="col-md-2 col-form-label">Name:</label>
+        <div class="col-md-10">
+            <InputText id="teamName" class="form-control" @bind-Value="@team.TeamName" />
+        </div>
+    </div>
+    <div class="form-group row">
+        <label for="coachname" class="col-md-2 col-form-label">Coach Name:</label>
+        <div class="col-md-10">
+            <InputText id="coachname" class="form-control" @bind-Value="@team.NameOfCoach" />
+        </div>
+    </div>
+    <div class="form-group row">
+        <label for="ranking" class="col-md-2 col-form-label">Ranking:</label>
+        <div class="col-md-10">
+    <InputNumber id="ranking" class="form-control" @bind-Value="@team.Ranking" />
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12 text-right">
+            <button type="submit" class="btn btn-success" onClick="@CreateTeam">Create</button>
+        </div>
+    </div>
+    </EditForm>
+<div class="row">
+    <div class="col-md-12 text-right">
+        <p style="color:@color"> @msg</p>
+    </div>
+</div>
+
+
+<AllTeams/>
+
+@code {
+
+
+
+    private string teamName;
+    private string coachname;
+    private int ranking;
+    private string msg = "";
+    private string color = "green";
+    private Team team = new Team();
+
+
+
+    private async Task<string> CreateTeam()
+    {
+
+        var response = await callTeamApi.CreateTeam(team);
+        msg = response.ToString();
+        if(msg == "OK")
+        {
+            msg = "The team has been added successfully.";
+
+        }
+        else
+        {
+            msg = "The team has been added already!";
+            color = "red";
+        }
+        return msg;
+    }
+}

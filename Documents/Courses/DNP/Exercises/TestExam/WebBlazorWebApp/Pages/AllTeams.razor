@@ -1,0 +1,71 @@
+﻿@using WebBlazorWebApp.Models;
+@inject WebBlazorWebApp.ClientCallingAPI.ITeamPlayer teamsReload;
+<h3>AllTeams</h3>
+<button class="btn btn-outline-primary" @onclick="Reload">Load</button>
+@if(teams == null)
+{
+    
+}
+else if(!teams.Any())
+{
+    <p>No team to display</p>
+}else{
+<table class="table">
+    <thead>
+    <tr>
+        <th>Team Name</th>
+        <th>Coach Name</th>
+        <th>Ranking</th>
+        <th>@teams.Count</th>
+    </tr>
+    </thead>
+    <tbody>
+     @foreach(var team in teams){
+    <tr>
+       
+        <td>@team.TeamName</td>
+        <td>@team.NameOfCoach</td>
+        <td>@team.Ranking</td>
+        
+    </tr>
+     }
+        </tbody>
+</table>
+}
+
+@if (!string.IsNullOrEmpty(msg))
+{
+    <label style="color: red">@msg</label>
+}
+
+
+@code {
+
+
+    public List<Team> teams = new();
+
+    public string msg = " ";
+    public async Task Reload()
+    {
+        try
+        {
+
+            teams = await teamsReload.GetTeams();
+
+        }
+        catch (Exception e)
+        {
+
+            Console.WriteLine(e);
+            msg = e.Message;
+        }
+       
+
+        
+
+    }
+
+    
+
+
+}

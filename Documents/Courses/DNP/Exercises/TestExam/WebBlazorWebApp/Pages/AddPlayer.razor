@@ -1,0 +1,126 @@
+﻿@page "/AddPlayer"
+@using WebBlazorWebApp.Models;
+@inject WebBlazorWebApp.ClientCallingAPI.ITeamPlayer playerAdd;
+
+<h2>Add a Player</h2>
+
+<EditForm Model="player" OnSubmit="CreateNewPlayer" class="card card-body bg-light mt-5">
+
+    <div class="form-group row">
+        <label for="teamSelection" class="col-md-2 col-form-label">Name:</label>
+        <div class="col-md-10">
+            @if (namesOfTeams == null)
+            {
+
+            }
+            else if (!namesOfTeams.Any())
+            {
+                <p>No Team has been found!</p>
+            }
+            else
+            {
+                <select class="form-control" @bind="teamName">
+                    @foreach (var team in namesOfTeams)
+                    {
+                        <option value="@team">@team</option>
+                    }
+                </select>
+            }
+        </div>
+    </div>
+    <div class="form-group row">
+        <label for="playerName" class="col-md-2 col-form-label">Name:</label>
+        <div class="col-md-10">
+            <InputText id="playerName" class="form-control" @bind-Value="@player.Name" />
+        </div>
+    </div>
+        <div class="form-group row">
+        <label for="coachname" class="col-md-2 col-form-label">Shirt Number:</label>
+    <div class="col-md-10">
+            <InputNumber id="shirtNumber" class="form-control" @bind-Value="@player.ShirtNumber" />
+        </div>
+    </div>
+    <div class="form-group row">
+        <label for="salary" class="col-md-2 col-form-label">Salary:</label>
+        <div class="col-md-10">
+            <InputNumber id="salary" class="form-control" @bind-Value="@player.Salary" />
+        </div>
+    </div>
+    <div class="form-group row">
+        <label for="goalThisSeason" class="col-md-2 col-form-label">Goal This Season:</label>
+        <div class="col-md-10">
+            <InputNumber id="goalThisSeason" class="form-control" @bind-Value="@player.GoalsThisSeason" />
+        </div>
+    </div>
+        <div class="form-group row">
+    <label for="position" class="col-md-2 col-form-label">Position:</label>
+        <div class="col-md-10">
+            <InputText id="salary" class="form-control" @bind-Value="@player.Position" />
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12 text-right">
+            <button type="submit" class="btn btn-success">Create</button>
+        </div>
+    </div>
+</EditForm>
+<div class="row">
+    <div class="col-md-12 text-right">
+        <p style="color:@color"> @msg</p>
+    </div>
+</div>
+
+
+
+@code {
+    public List<string> namesOfTeams = new List<string>();
+    private string msg = "";
+    private Player player = new Player();
+    private string teamName = " ";
+    private string color = "";
+    private List<Team> teams = new List<Team>();
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        teams = await playerAdd.GetTeams();
+        foreach(var item in teams)
+        {
+            namesOfTeams.Add(item.TeamName);
+        }
+
+    }
+
+
+    private async Task CreateNewPlayer()
+    {
+        try
+        {
+           
+            msg = await playerAdd.AddPlayer(player, teamName);
+            if (msg == "OK")
+            {
+                msg = $"The player has been added to team: {teamName}";
+                color = "green";
+            }
+            else
+            {
+                msg = "something went wrong!";
+                color = "red";
+            }
+
+
+
+        }
+        catch (Exception e)
+        {
+
+            Console.WriteLine(e.Message);
+            msg = e.Message;
+            color = "red";
+
+        }
+      
+    }
+
+}
